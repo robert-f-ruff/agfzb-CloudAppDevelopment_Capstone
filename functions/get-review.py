@@ -26,4 +26,4 @@ def main(dict):
     except (requests.exceptions.RequestException, ConnectionResetError) as err:
         return {"error": err}
 
-    return {"reviews": result}
+    return {"reviews": result['docs']}
