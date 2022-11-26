@@ -17,15 +17,17 @@
        });
        cloudant.setServiceUrl(params.COUCH_URL);
        try {
-         if (params.state != '') {
-             let dealershipsList = await cloudant.postFind({db: 'dealerships', selector: {state: params.state} })
-             result = { 'dealerships': dealershipsList.result.docs }
-         }
-         else {
-             let dealershipsList = await cloudant.postAllDocs({ db: 'dealerships', includeDocs: true });
-             result = { 'dealerships': dealershipsList.result.rows }
-         }
-         return result;
+            if (params.state) {
+                let dealershipsList = await cloudant.postFind({ db: 'dealerships', selector: {state: params.state} })
+                result = { 'dealerships': dealershipsList.result.docs }
+            } else if (params.id) {
+                let dealership = await cloudant.postFind({ db: 'dealerships', selector: {id: parseInt(params.id)} })
+                result = { 'dealerships': dealership.result.docs }
+            } else {
+                let dealershipsList = await cloudant.postAllDocs({ db: 'dealerships', includeDocs: true });
+                result = { 'dealerships': dealershipsList.result.rows }
+            }
+            return result;
        } catch (error) {
            return { error: error.description };
        }

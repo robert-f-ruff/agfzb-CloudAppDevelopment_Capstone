@@ -44,7 +44,7 @@ class CarDealer:
         return "Dealer name: " + self.full_name
 
 class DealerReview:
-    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment, id):
+    def __init__(self, dealership, name, purchase, review, purchase_date, car_make, car_model, car_year, sentiment):
         self.dealership = dealership
         self.name = name
         self.purchase = purchase
@@ -54,7 +54,6 @@ class DealerReview:
         self.car_model = car_model
         self.car_year = car_year
         self.sentiment = sentiment
-        self.id = id
     
     def __str__(self):
         return "Reviewer name: " + self.name

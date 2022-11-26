@@ -70,6 +70,22 @@ def get_dealers_by_state_from_cf(url, **kwargs):
 
     return results
 
+def get_dealer_by_id_from_cf(url, **kwargs):
+    # Call get_request with a URL parameter
+    json_result = get_request(url, id=kwargs["id"])
+    if json_result:
+        # Get the row list in JSON as dealers
+        dealers = json_result["dealerships"]
+        # For each dealer object
+        for dealer in dealers:
+            # Create a CarDealer object
+            dealer_obj = CarDealer(address=dealer["address"], city=dealer["city"], full_name=dealer["full_name"],
+                                   id=dealer["id"], lat=dealer["lat"], long=dealer["long"],
+                                   short_name=dealer["short_name"],
+                                   st=dealer["st"], zip=dealer["zip"])
+
+    return dealer_obj
+
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
@@ -82,7 +98,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
             # Create a DealerReview object
             review_obj = DealerReview(dealership=int(review["dealership"]), name=review["name"], purchase=review["purchase"], review=review["review"],
                                       purchase_date=review["purchase_date"], car_make=review["car_make"], car_model=review["car_model"], car_year=review["car_year"],
-                                      sentiment=analyze_review_sentiments(review["review"]), id=review["id"])
+                                      sentiment=analyze_review_sentiments(review["review"]))
             results.append(review_obj)
 
     return results
@@ -102,4 +118,4 @@ def analyze_review_sentiments(text):
         text=text,
         features=Features(sentiment=SentimentOptions(document=True))).get_result()
     
-    return response['sentiment']['document']['label'].title()
+    return response['sentiment']['document']['label']
